@@ -1,0 +1,417 @@
+------------------------------------------------------------
+-- https://github.com/MuffinMario/Siedler-4-Script-und-Referenzen/blob/master/custom/Condition%2C%20Statements.rtf
+-- https://github.com/MuffinMario/Siedler-4-Script-und-Referenzen/blob/master/custom/LUA_S4_TABLES.txt
+-- hello person that is reading this, you are probably someone who knows how to
+-- read memory, thanks. This map is made my me (MuffinMario) and it took me like idk a 
+-- few days to do so please consider you reading this a priviledge.
+-- Finding how to add scripts took me about 2 hours, it was pretty easy, if you have the 
+-- creativity on hand and you're good at following clues ;)
+--
+-- if you want to add your own scripts in the editor(S4Editor.exe), on map export 
+-- the program reads the string at 0x0047512C which is 65524 bytes long (UTF8 i assume)
+-- and adds it into the .map when it doesnt start with 0x0 (null byte)
+-- so use a program like cheat engine, add the address as 65524 bytes long string and then change its value to 
+-- your string(script). have fun bye
+--
+-- i havent done enough testing but if that doesn't work, add a victory condition inside the editor and then remove it again, 
+-- idk you probably dont need to do that though
+--
+-- Map name: Meeresblockade
+-- Author:   MuffinMario
+-- Date:     20.03.2018 - 28.03.2018
+-------------------------------------------------------------
+startPos={x=473,y=535}
+
+-- lets alter the table from new world wiking mission 1, it's actually great written, gratz to whoever wrote that
+circles= {
+	c1={
+		center={
+			x=474,
+			y=536
+		},
+		radius=6,
+		effect=Effects.MAGIC_PILE02,
+		sound=Sounds.NO_SOUND,
+		density=1,
+		delay=0,
+		effectsPerTick=8,
+		split=4,
+		coordinates={
+			x={},
+			y={}
+		},
+		effectsAmount=1,
+		_i=1,
+		_j=1
+	}
+}
+
+
+
+objectPosTbl ={
+	--x , y , id
+	{307,94,19},
+	{315,99,20},
+	{320,108,19},
+	
+	{260,385,19},
+	{265,394,19},
+	
+	{467,175,22},
+	{461,153,21},
+	{459,142,22},
+	{507,163,21},
+	{477,168,21},
+	{472,196,22},
+	{507,245,21},
+	{513,231,21},
+	{532,229,22},
+	{519,255,22},
+	{533,268,21},
+	{505,233,21},
+	{534,264,21},
+	{547,274,22},
+	{558,273,21}
+	
+}
+
+templeSpots={
+	enemy1={
+		{party=3,x=136,y=123},
+		{party=3,x=116,y=196},
+		{party=3,x=160,y=317}
+	},
+	enemy2={
+		{party=4,x=144,y=504},
+		{party=4,x=176,y=622},
+		{party=4,x=264,y=641}
+	}
+}
+
+shipyardSpots={
+	{party=3,x=289,y=193},
+	{party=3,x=271,y=245},
+	{party=4,x=282,y=581}
+}
+
+attackSpots={
+	{
+		ship={x=323,y=519},
+		x=345,
+		y=531,
+		to=2 -- (player)
+	},
+	{
+		ship={x=333,y=373},
+		x=350,
+		y=385,
+		to=2 -- (player)
+	},
+	{
+		ship={x=372,y=373},
+		x=384,
+		y=392,
+		to=2 -- (player)
+	},
+	
+	---------
+	
+	{
+		ship={x=415,y=337},
+		x=424,
+		y=322,
+		to=1 -- (player)
+	},
+	{
+		ship={x=393,y=182},
+		x=400,
+		y=175,
+		to=1 -- (player)
+	},
+	{
+		ship={x=407,y=97},
+		x=416,
+		y=110,
+		to=1 -- (player)
+	}
+}
+
+reefSpots={
+	enemy1={
+		{x=212,y=435,id=107},
+		{x=215,y=444,id=107},
+		{x=218,y=450,id=108},
+		{x=220,y=454,id=110},
+		{x=222,y=458,id=109},
+		{x=224,y=462,id=109},
+		{x=226,y=468,id=108},
+		{x=228,y=472,id=108}
+	},
+	enemy2={
+		{x=170,y=420,id=107},
+		{x=172,y=425,id=107},
+		{x=174,y=430,id=108},
+		{x=176,y=435,id=110},
+		{x=178,y=440,id=108},
+		{x=180,y=447,id=110},
+		{x=182,y=452,id=109},
+		{x=184,y=454,id=109},
+		{x=187,y=460,id=109},
+		{x=185,y=456,id=108}
+		
+	}
+}
+
+-- ez: 20-25 hard : 10-15
+function generateNextTimeMinutes()
+	if Game.GetDifficulty() == 0 then
+		return 20 + Game.Random(5)
+	else
+		return 10 + Game.Random(5)
+	end
+end
+
+function initVars()
+	--enemy1/2 no temple?
+	Vars.Save1 = 0  
+	Vars.Save2 = 0
+	
+	--ship move state (0 = wait till time has come then Spawn ship and move | 1= spawn settlers on arrival)
+	Vars.Save3 = 0
+	Vars.Save4 = 0
+	-- indices in attackSpots (0 = nil)
+	Vars.Save5 = 0 
+	Vars.Save6 = 0
+	-- minute timer for next arrival
+	if Game.GetDifficulty() == 0 then
+		Vars.Save7 = 45
+		Vars.Save8 = 45
+	else
+		Vars.Save7 = 30
+		Vars.Save8 = 30
+	end
+	-- spawn amount on each ship (increases 1.1 times each arrival)
+	Vars.Save9 = 1
+	--dbg.stm(Vars.Save7 .. " " .. Game.Time())
+end
+function removeReefs(tbl)
+-- place objects
+	k,v = next(tbl,nil)
+	--iterate table
+	while k do
+		Map.DeleteReef(v.x,v.y)
+		k,v = next(tbl,k)
+	end
+end
+function addReefs(tbl)
+	k,v = next(tbl,nil)
+	while k do
+		Map.AddReef(v.x,v.y,v.id)
+		k,v = next(tbl,k)
+	end
+end
+
+-- scripting it in is less work than reverse eng the editor
+function genfunc()
+	local f = function(x,y,id) Map.AddDecoObject(x,y,id) end
+	-- place objects
+	k,v = next(objectPosTbl,nil)
+	--iterate table
+	while k do
+		f(v[1],v[2],v[3])
+		k,v = next(objectPosTbl,k)
+	end
+	
+	Magic.IncreaseMana(3,1000)
+	Magic.IncreaseMana(4,1000)
+	
+	--add reefs stuff
+	addReefs(reefSpots.enemy1)
+	addReefs(reefSpots.enemy2)
+end
+function startfunc()
+	AI.SetPlayerVar(3,"SoldierLimitRelative",200,250,250)
+	AI.SetPlayerVar(4,"SoldierLimitRelative",200,250,250)
+	AI.SetPlayerVar(3,"SoldierLimitAbsolute",240,300,300)
+	AI.SetPlayerVar(4,"SoldierLimitAbsolute",240,300,300)
+	
+	Game.SetFightingStrength(2,150)
+	Game.SetFightingStrength(3,100)
+	Game.SetFightingStrength(4,100)
+	
+	Map.SetScreenPos(startPos.x,startPos.y)
+	
+	-----/ Defense check for ship arrival stuff\----
+	--Settlers.AddSettlers(501,241,1,Settlers.SWORDSMAN_03,700)
+	
+	-----/ Victory check \------
+	--v1=Vehicles.AddVehicle(38,383,1,Vehicles.FERRY,0,0,1)
+	--v2=Vehicles.AddVehicle(50,383,1,Vehicles.FERRY,0,0,1)
+	--Vehicles.AddWheelerToFerry(v2,Vehicles.FOUNDATION_CART)
+	--Settlers.AddSettlersToFerry(v1,Settlers.SWORDSMAN_03,15)
+	--Settlers.AddSettlersToFerry(v2,Settlers.SWORDSMAN_03,5)
+	
+	-----/ Attack check \-----
+	--Settlers.AddSettlers(192,284,1,Settlers.SWORDSMAN_03,700)
+	--Settlers.AddSettlers(209,515,1,Settlers.SWORDSMAN_03,700)
+	
+end
+
+-- number one
+function spawnShip1()
+	-- retarded way of checking if yard is there, but its late and i have a headache
+	-- no spawn if no shipyards -> easy as that 
+	if Buildings.Amount(3,Buildings.SHIPYARD,Buildings.READY) +Buildings.Amount(4,Buildings.SHIPYARD,Buildings.READY) == 0 then
+		unrequest_event(spawnShip1)
+	end
+ 
+
+	--ship is not ready to move yet
+	if Vars.Save3 == 0 then
+	--dbg.stm(Vars.Save7 .. " - " .. Game.Time())
+		-- if time is over
+		if Vars.Save7 <= Game.Time() then
+			--dbg.stm("LETSAGO")
+			-- increase step
+			Vars.Save3 = Vars.Save3 + 1
+			
+			--get random ship spawn spot and send to random pos
+			_goal = attackSpots[Game.Random(6)+1]
+			_ship = shipyardSpots[Game.Random(3)+1]
+			
+			Vehicles.AddVehicle(_ship.x,_ship.y,_ship.party,Vehicles.FERRY,0,0,1)
+			AI.NewSquad(_ship.party, AI.CMD_MOVE_AND_STAY, _goal.ship.x, _goal.ship.y)
+			
+			--dbg.stm("Ship from " .. _ship.party.. " (" .. _ship.x .. "|" .. _ship.y .. ") is going " .. _goal.ship.x .. "|" .. _goal.ship.y)
+		end
+	else if Vars.Save3 == 1 then
+		--dbg.stm("check... " .. _ship.party .. " " .. _goal.ship.x .. " " .. _goal.ship.y .. " " .. 25 .. " " .. Vehicles.AmountInArea(_ship.party,Vehicles.FERRY,_goal.ship.x,_goal.ship.y,25))
+		if Vehicles.AmountInArea(_ship.party,Vehicles.FERRY,_goal.ship.x,_goal.ship.y,25) == 1 or Vars.Save7+5 < Game.Time() then
+			Vars.Save3 = 0
+			Vars.Save7 = Vars.Save7 + generateNextTimeMinutes()
+			Vehicles.KillVehicles(_ship.party,Vehicles.FERRY,_goal.ship.x,_goal.ship.y,25)
+			Vehicles.KillVehicles(_ship.party,Vehicles.FERRY,_ship.x,_ship.y,25)
+			--ok its there remove ship and spawn settlers
+			--Vehicles.KillVehicle(_ship.party,Vehicles.FERRY,_goal.ship.x,_goal.ship.y,25,0)
+			d = Game.GetDifficulty()
+			-- multipliert
+			m = Vars.Save9
+			_lv3sword = Game.Random(5)+10
+			_lv3bow   = Game.Random(5)+10
+			_lv3blow  = Game.Random(2)+5
+			_lv2sword = Game.Random(5)+5
+			_lv2bow   = Game.Random(5)+5
+			_lv2blow  = Game.Random(2)+0
+			_squadl   = 1
+			_priest   = 2
+			if d ~= 0 then
+			_lv3sword = _lv3sword + 5
+			_lv3bow   = _lv3bow + 5
+			_lv3blow  = _lv3blow + 5
+			_lv2sword = _lv2sword + 5
+			_lv2bow   = _lv2bow + 5
+			_lv2blow  = _lv2blow + 2
+			end
+			_lv3sword = _lv3sword * m
+			_lv3bow   = _lv3bow * m
+			_lv3blow  = _lv3blow * m
+			_lv2sword = _lv2sword * m
+			_lv2bow   = _lv2bow * m
+			_lv2blow  = _lv2blow * m
+			Vars.Save9 = Vars.Save9 + 0.1
+			Settlers.AddSettlers(_goal.x,_goal.y,_ship.party,Settlers.SWORDSMAN_03,_lv3sword)
+			Settlers.AddSettlers(_goal.x,_goal.y,_ship.party,Settlers.BOWMAN_03,_lv3bow)
+			Settlers.AddSettlers(_goal.x,_goal.y,_ship.party,Settlers.BLOWGUNWARRIOR_03,_lv3blow)
+			Settlers.AddSettlers(_goal.x,_goal.y,_ship.party,Settlers.SWORDSMAN_02,_lv2sword)
+			Settlers.AddSettlers(_goal.x,_goal.y,_ship.party,Settlers.BOWMAN_02,_lv2bow)
+			Settlers.AddSettlers(_goal.x,_goal.y,_ship.party,Settlers.BLOWGUNWARRIOR_02,_lv2blow)
+			Settlers.AddSettlers(_goal.x,_goal.y,_ship.party,Settlers.PRIEST,_priest)
+			Settlers.AddSettlers(_goal.x,_goal.y,_ship.party,Settlers.SQUADLEADER,_squadl)
+			
+			AI.NewSquad(_ship.party,AI.CMD_SUICIDE_MISSION)
+			
+		end
+	end
+end
+	
+end
+
+function VictoryConditionCheck()
+	Game.DefaultPlayerLostCheck(1)
+	--wiking lost market???????
+	if Buildings.ExistsBuildingInArea(2,Buildings.MARKETPLACE,startPos.x,startPos.y,5) == 0 then
+		Game.PlayerLost(1)
+		Game.PlayerLost(2)
+	end
+	
+	--enemy1 reef alrdy deleted?
+	if Vars.Save1 == 0 then
+		e1 = 0
+		k,v = next(templeSpots.enemy1,nil)
+		while k do
+			e1 = e1 + Buildings.ExistsBuildingInArea(v.party,Buildings.BIGTEMPLE,v.x,v.y,10)
+			k,v = next(templeSpots.enemy1,k)
+		end
+		if e1 == 0 then
+			Vars.Save1 = 1
+			-- green no towers
+			removeReefs(reefSpots.enemy1)
+			dbg.stm("Es ist geschafft. Die Barriere des Gruenen ist durchbrochen")
+			if Vars.Save2 == 1 then
+				--both no tower
+				dbg.stm("Die Passage ist frei! Wir koennen passieren.")
+			end
+		end
+	end
+	--enemy2 reef alrdy deleted?
+	if Vars.Save2 == 0 then
+		e2 = 0
+		k,v = next(templeSpots.enemy2,nil)
+		while k do
+			e2 = e2 + Buildings.ExistsBuildingInArea(v.party,Buildings.BIGTEMPLE,v.x,v.y,10)
+			k,v = next(templeSpots.enemy2,k)
+		end
+		if e2 == 0 then
+			Vars.Save2 = 1
+			-- green no towers
+			removeReefs(reefSpots.enemy2)
+			dbg.stm("Wir haben die Tempel zerstoert! Die gelbe Barriere ist durchbrochen")
+			if Vars.Save1 == 1 then
+				--both no tower
+				dbg.stm("Die Passage ist frei! Wir koennen passieren.")
+			end
+		end
+	end
+	
+	--unncessary placeholders
+	ph1,ph2,ph3,lvl3Soldiers,ph4,cart = Vehicles.GetFerryCargoInArea(1,128,424,22)
+	if lvl3Soldiers >= 20 and cart >= 1 then
+		Game.EnemyPlayersLost(1)
+		dbg.stm("Wir haben es geschafft. Stuerzen wir uns nun ins naechste Abenteuer!")
+	end
+	--check for default lose condition
+	Game.DefaultGameEndCheck()
+end
+
+
+function new_game()
+	
+	request_event(initVar,Events.FIRST_TICK_OF_NEW_GAME)
+	request_event(VictoryConditionCheck,Events.VICTORY_CONDITION_CHECK)
+	request_event(spawnShip1,Events.FIVE_TICKS)
+	request_event(genfunc,Events.FIRST_TICK_OF_NEW_GAME)
+	request_event(startfunc,Events.FIRST_TICK_OF_NEW_OR_LOADED_GAME)
+end
+
+
+function register_functions()
+	reg_func(initVars)
+	reg_func(VictoryConditionCheck)
+	reg_func(genfunc)
+	reg_func(startfunc)
+	reg_func(spawnShip1)
+	reg_func(removeReefs)
+	reg_func(addReefs)
+	reg_func(render)
+	reg_func(generateNextTimeMinutes)
+end 

@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien\S4Map">
+      <UniqueIdentifier>{b2dab42c-4ac5-420f-ac8c-6fb796099a22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4">
+      <UniqueIdentifier>{30c2c22f-dccb-4be7-bd57-fc552c64fc45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4\Util">
+      <UniqueIdentifier>{58a04ad7-5732-4a28-86d9-18ead2af3651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4\Util\Compress">
+      <UniqueIdentifier>{ea404c9a-4bd3-40e9-a64f-10d5ae2c34ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4Map\S4MapFile">
+      <UniqueIdentifier>{1821b218-8d16-4998-9331-26c7e52e9363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4Map\S4MapFile\Segments">
+      <UniqueIdentifier>{91deb15d-214e-4403-83bb-5d8bb0bc181c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4\Util\Compress\Inflate">
+      <UniqueIdentifier>{00c2102f-3ef4-4adf-930b-ce86aaf6279a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4\Util\Color">
+      <UniqueIdentifier>{fb44f2e2-1117-4417-840d-d3db8704d015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4Map\S4MapFile\Segments\Data">
+      <UniqueIdentifier>{b24ef435-bae5-4213-8ad9-b8e13ce5a7c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4Map\S4MapFile\Segments\Header">
+      <UniqueIdentifier>{8e078a17-1afd-47b9-8507-8d7b4e7f7dc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments">
+      <UniqueIdentifier>{6dc278d3-1b8d-49a6-98a3-7cd6fb42af78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="crc16.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="util.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="MapData.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="S4Inflate.h">
+      <Filter>Headerdateien\S4\Util\Compress</Filter>
+    </ClInclude>
+    <ClInclude Include="crc16.h">
+      <Filter>Headerdateien\S4\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="CodewordTable.h">
+      <Filter>Headerdateien\S4\Util\Compress\Inflate</Filter>
+    </ClInclude>
+    <ClInclude Include="DummyData.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="TeamData.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="Settler.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="VictoryConditions.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorData.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data\StaticSegments</Filter>
+    </ClInclude>
+    <ClInclude Include="S4MapPreviewImage.h">
+      <Filter>Headerdateien\S4Map\S4MapFile</Filter>
+    </ClInclude>
+    <ClInclude Include="DecodeColorData.h">
+      <Filter>Headerdateien\S4\Util\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomSegment.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="SegmentEnumNames.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="SegmentEnums.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticSegment.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="S4MapSegment.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="S4MapSegmentHeader.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="S4SegmentHeaderCrypt.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SegmentTypesEnum.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="S4MapFile.h">
+      <Filter>Headerdateien\S4Map\S4MapFile</Filter>
+    </ClInclude>
+    <ClInclude Include="SegmentTypesEnumNames.h">
+      <Filter>Headerdateien\S4Map\S4MapFile\Segments</Filter>
+    </ClInclude>
+    <ClInclude Include="S4Map.h">
+      <Filter>Headerdateien\S4Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h">
+      <Filter>Headerdateien\S4Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GroundData.h">
+      <Filter>Headerdateien\S4Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GroundEnums.h">
+      <Filter>Headerdateien\S4Map</Filter>
+    </ClInclude>
+    <ClInclude Include="ByteBufferReader.h">
+      <Filter>Headerdateien\S4\Util</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
