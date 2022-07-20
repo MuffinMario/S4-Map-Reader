@@ -135,7 +135,7 @@ namespace S4MAP::S4MapFile {
 
 				SequenceByteContainer ee(fileContent.cbegin() + offset, fileContent.cbegin() + offset + decrypted.m_fileSegmentSize);
 				S4MAP::Compress::CS4Inflate inflate(ee, decrypted.m_uncompressedSize);
-				std::cout << "inflating " << (int)decrypted.m_segmentType << std::endl;
+				//std::cout << "inflating " << (int)decrypted.m_segmentType << std::endl;
 				auto& inflatedContent = inflate.inflate();
 
 				/* Assign decompressed content */
@@ -214,10 +214,6 @@ namespace S4MAP::S4MapFile {
 
 				mapfile.m_rawSegments.push_back(SS4MapSegment{ decrypted,inflatedContent,ee });
 
-
-
-				if (decrypted.m_segmentType <= EStaticSegmentIDs::EDITOR_INFO)
-					File::writeFile(""s + std::to_string(static_cast<uint32_t>(decrypted.m_segmentType)) + ".deflated_mapsgmt", inflatedContent);
 				offset += decrypted.m_fileSegmentSize;
 
 				if (decrypted.m_segmentType == EStaticSegmentIDs::HEADER_SIGNAL_END)

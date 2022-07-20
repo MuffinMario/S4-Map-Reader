@@ -135,17 +135,6 @@ namespace S4MAP::Compress {
 				// normal byte
 				if (codeword < 0x100)
 				{
-					//if (pDeflateOriginalComparison)
-					//{
-					//	if (pDeflateOriginalComparison->at(decompressContainerOffset) != codeword)
-					//	{
-					//		StringStream ss;
-					//		ss << "Original Byte at offset 0x" << std::hex << (decompressContainerOffset) << " should be 0x" << std::hex << std::setfill('0') << std::setw(2) <<
-					//			((int)pDeflateOriginalComparison->at(decompressContainerOffset)) << " but is 0x" << std::hex << std::setfill('0') << std::setw(2) <<
-					//			((int)codeword);
-					//		auto strerr = ss.str();
-					//	}
-					//}
 					m_inflatedData[inflateContainerOffset++] = codeword;
 				}
 				// signal to rearrange and create new lengths
@@ -232,7 +221,6 @@ namespace S4MAP::Compress {
 					auto copyPos = inflateContainerOffset - offset; /*inflateContainerOffset - ((bv | copyOffset) + (baseVal << 9));*/
 						
 					auto copyPosBegin = copyPos;
-					
 					//std::cout << "Repeat (len=" << length << ", abs_offset=" << copyPos << ", rel_offset=" << offset << ")\n";
 					for (uint32_t i = 0; i < length; i++)
 					{
@@ -243,13 +231,6 @@ namespace S4MAP::Compress {
 							//															|
 							//														    v 
 							//keep data at 0 (very rare case were we copy e.g. (abs_off=-2,len>2) => {0,0,inflated[0],inflated[1],...}
-										//std::cerr <<
-										//	//throw std::runtime_error(
-										//	"Trying to copy a position in buffer that has not been written yet, trying to access index: "s
-										//	+ std::to_string(copyPos) + " out of "s + std::to_string(inflateContainerOffset) + " with copylength of "s + std::to_string(length) + "\n"s;
-										////)
-										//	;
-										//	system("PAUSE");
 						}
 						else {
 							data = m_inflatedData[copyPos];

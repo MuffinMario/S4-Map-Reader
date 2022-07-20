@@ -136,9 +136,12 @@ void currentDebugPrint(const S4MAP::S4MapFile::CS4MapFile& mapfile)
 	auto editordataseg = mapfile.getSegment(EStaticSegmentIDs::EDITOR_INFO);
 
 
-	/*auto fn = printFilename(mapfile);
-	auto buildings = printBuildings(mapfile);*/
-	auto offsetPixelColorFunc = [&map](uint32_t offset) { return [&map,offset](const uint32_t x, const uint32_t y) {
+
+	auto name = printFilename(mapfile);
+
+	std::cout << "Do something with me!\n";
+
+	/*auto offsetPixelColorFunc = [&map](uint32_t offset) { return [&map,offset](const uint32_t x, const uint32_t y) {
 		png::rgb_pixel pxl;
 		auto data = map.getGroundDataAt(x, y);
 		auto ground = map.getGroundAt(x, y);
@@ -156,18 +159,15 @@ void currentDebugPrint(const S4MAP::S4MapFile::CS4MapFile& mapfile)
 			pxl.red = 0xFF;
 		}
 
-		return pxl; }; };
-
-	auto name = printFilename(mapfile);
-
-	printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap8thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(8));
-	printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap7thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(7));
-	printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap6thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(6));
-	printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap5thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(5));
-	printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap4thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(4));
-	printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap3rdBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(3));
-	printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap2ndBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(2));
-	printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap1stBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(1));
+		return pxl; }; };*/
+	//printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap8thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(8));
+	//printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap7thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(7));
+	//printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap6thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(6));
+	//printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap5thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(5));
+	//printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap4thBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(4));
+	//printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap3rdBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(3));
+	//printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap2ndBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(2));
+	//printDebugHeatmapPNG((mapfile.getFilename() + "_heatmap1stBit.png"s).c_str(), map.getMapSize(), offsetPixelColorFunc(1));
 }
 
 const SequenceContainer<String> testSubjects = {
@@ -177,11 +177,11 @@ const SequenceContainer<String> testSubjects = {
 };
 
 
-constexpr bool iterateAllFiles = false;
+constexpr bool iterateAllFiles = true;
 int main() {
 	if constexpr (iterateAllFiles)
 	{
-		for (const auto& file : std::filesystem::recursive_directory_iterator(R"(D:\Ubisoft Games\thesettlers4\Map\Campaign)"))
+		for (const auto& file : std::filesystem::recursive_directory_iterator(R"(D:\Ubisoft Games\thesettlers4\Map)"))
 		{
 			if (!file.is_regular_file()
 				//|| file.path().extension() != ".edm"
